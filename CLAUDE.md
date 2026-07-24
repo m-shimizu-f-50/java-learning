@@ -4,7 +4,7 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 
 ## 進捗
 
-- [] Java基礎文法（変数・型、制御構文、配列、メソッド）
+- [x] Java基礎文法（変数・型、制御構文、配列、メソッド）
 - [] オブジェクト指向（クラス、継承、インターフェース理解済み。Circle/Rectangle演習中）
 - [ ] Java応用（Stream API、ラムダ式、コレクション）
 - [ ] Spring Boot基礎

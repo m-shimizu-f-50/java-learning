@@ -20,3 +20,13 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 ## ディレクトリ構成
 
 演習コードはトピックごとにディレクトリを分けて管理する想定。
+
+## 実行方法
+
+各トピックのディレクトリに移動し、コンパイル・実行する。
+
+```bash
+cd 03-array
+javac Main.java   # コンパイル（Main.classを生成）
+java Main         # 実行（拡張子.classは付けない）
+```
