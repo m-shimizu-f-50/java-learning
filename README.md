@@ -30,3 +30,11 @@ cd 03-array
 javac Main.java   # コンパイル（Main.classを生成）
 java Main         # 実行（拡張子.classは付けない）
 ```
+
+複数ファイルで構成されるトピックは、ワイルドカードで一括コンパイルできる。
+
+```bash
+cd 07-interface
+javac *.java      # ディレクトリ内の全.javaファイルをまとめてコンパイル
+java Main
+```
