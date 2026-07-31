@@ -6,7 +6,7 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 
 - [x] Java基礎文法（変数・型、制御構文、配列、メソッド）
 - [x] オブジェクト指向（クラス、継承、インターフェース、ポリモーフィズム）
-- [ ] Java応用（Stream API、ラムダ式、コレクション）
+- [x] Java応用（Stream API、ラムダ式、コレクション）
 - [ ] Spring Boot基礎
 - [ ] Spring Boot × DB連携
 - [ ] 実務レベルの実践
