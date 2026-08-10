@@ -7,16 +7,16 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 - [x] Java基礎文法（変数・型、制御構文、配列、メソッド）
 - [x] オブジェクト指向（クラス、継承、インターフェース、ポリモーフィズム）
 - [x] Java応用（Stream API、ラムダ式、コレクション）
-- [ ] Java Silver試験対策の補完
+- [x] Java Silver試験対策の補完
   - [x] アクセス修飾子・カプセル化（private/protected、getter/setter）
   - [x] static（フィールド・メソッド・初期化ブロック）
   - [x] 抽象クラス（abstract class）
   - [x] キャストとinstanceof
   - [x] 例外処理（try/catch/finally、checked/unchecked、try-with-resources）
-  - [ ] 可変長引数（varargs）
-  - [ ] 配列ユーティリティ（Arraysクラス）
-  - [ ] String/StringBuilderの詳細（不変性、文字列プール）
-  - [ ] java.time API
+  - [x] 可変長引数（varargs）
+  - [x] 配列ユーティリティ（Arraysクラス）
+  - [x] String/StringBuilderの詳細（不変性、文字列プール）
+  - [x] java.time API
 - [ ] Spring Boot基礎
 - [ ] Spring Boot × DB連携
 - [ ] 実務レベルの実践
