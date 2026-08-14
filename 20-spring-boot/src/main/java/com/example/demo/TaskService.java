@@ -1,39 +1,38 @@
 package com.example.demo;
 
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService {
-  private List<Task> tasks = new ArrayList<>();
+
+  private final TaskRepository taskRepository;
+
+  public TaskService(TaskRepository taskRepository) {
+    this.taskRepository = taskRepository;
+  }
 
   // 全件取得するメソッド
   public List<Task> getAll() {
-    return tasks;
+    return taskRepository.findAll();
   }
 
   // 指定のIDのタスクを取得するメソッド
   public Task getById(int id) {
-    for (Task task : tasks) {
-      if (task.getId() == id) {
-        return task;
-      }
-    }
-    return null;
+    return taskRepository.findById(id);
   }
 
   // タスクを追加するメソッド
   public Task create(String title) {
-    int id = tasks.size() + 1;
+    int id = taskRepository.findAll().size() + 1; // IDを自動生成する
     Task task = new Task(id, title, false);
-    tasks.add(task);
+    taskRepository.save(task);
     return task;
   }
 
   // タスクを削除するメソッド
   public void delete(int id) {
-    tasks.removeIf(task -> task.getId() == id);
+    taskRepository.deleteById(id);
   }
 
   // タスクを更新するメソッド
@@ -41,6 +40,7 @@ public class TaskService {
     Task task = getById(id);
     if (task != null) {
       task.setTitle(title);
+      taskRepository.save(task);
     }
     return task;
   }
