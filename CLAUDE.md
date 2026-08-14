@@ -17,7 +17,7 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
   - [x] 配列ユーティリティ（Arraysクラス）
   - [x] String/StringBuilderの詳細（不変性、文字列プール）
   - [x] java.time API
-- [ ] Spring Boot基礎
+- [x] Spring Boot基礎（DI/IoC、REST API、レイヤードアーキテクチャ）
 - [ ] Spring Boot × DB連携
 - [ ] 実務レベルの実践
 
