@@ -38,6 +38,50 @@ class FullTimeEmployee extends Employee {
 
 `Employee`は直接`new`できない（抽象クラスはインスタンス化不可）。共通する部分（`name`, `printName()`）は継承でそのまま使い回し、種類ごとに絶対に変わる部分（`calculateSalary()`）だけ各サブクラスに実装を強制する。
 
+### なぜ使うか（Before / After比較）
+
+**Before: 抽象クラスを使わない場合**
+
+`FullTimeEmployee`と`PartTimeEmployee`をそれぞれ独立したクラスとして書くと、共通のはずの部分が重複する。
+
+```java
+class FullTimeEmployee {
+    String name;
+    double monthlySalary;
+    void printName() { System.out.println("社員: " + name); } // 同じコード
+    double calculateSalary() { return monthlySalary; }
+}
+
+class PartTimeEmployee {
+    String name;
+    double hourlyRate;
+    int hoursWorked;
+    void printName() { System.out.println("社員: " + name); } // また同じコード
+    double calculateSalary() { return hourlyRate * hoursWorked; }
+}
+```
+
+**問題点:**
+
+- `printName()`の中身を直したくなったら、全クラスを1つずつ直す必要がある（重複コードの保守コスト）
+- 2クラスに共通の型がないため、`Employee[]`のような配列でまとめて扱えず、`14-cast`で学んだポリモーフィズムが使えない（呼び出し側で`instanceof`による分岐が必要になる）
+
+**After: 抽象クラスを使う場合**
+
+```java
+abstract class Employee {
+    String name;
+    void printName() { System.out.println("社員: " + name); } // 1箇所だけに書く
+    abstract double calculateSalary();
+}
+```
+
+**得られるメリット:**
+
+1. **共通処理を1箇所にまとめられる**: `printName()`を直したくなっても`Employee`だけ直せば、全サブクラスに反映される
+2. **ポリモーフィズムで統一的に扱える**: `Employee[]`配列に`FullTimeEmployee`も`PartTimeEmployee`も入れて、同じ`for`ループで処理できる（呼び出し側は種類を意識しなくていい）
+3. **実装忘れをコンパイル時に検出できる**: `calculateSalary()`を`abstract`にしているので、新しい社員種別を追加したときに実装を忘れるとコンパイルエラーになる（詳しくは下の「覚えておくべきルール・規約」を参照）
+
 ### インターフェースとの違い
 
 | | インターフェース | 抽象クラス |
