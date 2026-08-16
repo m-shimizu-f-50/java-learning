@@ -1,5 +1,15 @@
 # 20. Spring Boot基礎（REST API / CRUD）
 
+## 用語集
+
+- **REST API**: HTTPメソッド（GET/POST/PUT/DELETE）を使って、リソースに対する操作を表現するAPI設計の考え方
+- **CRUD**: Create（作成）・Read（読み取り）・Update（更新）・Delete（削除）の頭文字。データ操作の基本4パターン
+- **JSON（JavaScript Object Notation）**: サーバーとクライアントがデータをやり取りするための軽量なテキスト形式。`{"key": "value"}`のような見た目
+- **エンドポイント**: APIがリクエストを受け付ける、URLとHTTPメソッドの組み合わせ（例: `GET /tasks`）
+- **@PathVariable**: URLパスの一部（`/tasks/{id}`の`{id}`部分）を変数として受け取るアノテーション
+- **@RequestParam**: URLのクエリパラメータ（`?name=太郎`の部分）を受け取るアノテーション
+- **@RequestBody**: リクエストボディ全体を、指定した型のオブジェクトに変換して受け取るアノテーション
+
 ## 使い方
 
 REST APIのCRUDとHTTPメソッドの対応。
