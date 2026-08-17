@@ -19,13 +19,12 @@ public class TaskService {
 
   // 指定のIDのタスクを取得するメソッド
   public Task getById(int id) {
-    return taskRepository.findById(id);
+    return taskRepository.findById(id).orElse(null); // Optional<Task>で返ってくるので、.orElse(null)を付ける
   }
 
   // タスクを追加するメソッド
   public Task create(String title) {
-    int id = taskRepository.findAll().size() + 1; // IDを自動生成する
-    Task task = new Task(id, title, false);
+    Task task = new Task(title, false);
     taskRepository.save(task);
     return task;
   }
