@@ -18,7 +18,7 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
   - [x] String/StringBuilderの詳細（不変性、文字列プール）
   - [x] java.time API
 - [x] Spring Boot基礎（DI/IoC、REST API、レイヤードアーキテクチャ）
-- [ ] Spring Boot × DB連携
+- [x] Spring Boot × DB連携（Spring Data JPA）
 - [ ] 実務レベルの実践
 
 ## 進め方の希望

@@ -9,7 +9,7 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 - [x] Java応用（Stream API、ラムダ式、Optional、コレクション）
 - [x] 開発環境構築（JDK, IntelliJ IDEA, Git）
 - [x] Spring Boot基礎（DI/IoC、REST API、レイヤードアーキテクチャ）
-- [ ] Spring Boot × DB連携（Spring Data JPA）
+- [x] Spring Boot × DB連携（Spring Data JPA）
 - [ ] 実務レベルの実践（テスト、認証認可、ポートフォリオ作成）
 
 ## 環境
