@@ -73,6 +73,15 @@ public class GreetingController {
 - `@Component`/`@Service`/`@RestController`: 「このクラスをSpringのIoCコンテナに登録してほしい」という目印
 - コンストラクタでの受け取り: IoCコンテナが該当する型のインスタンスを自動的に探して渡す（＝DI、これが`@Autowired`の実体。コンストラクタが1つだけなら`@Autowired`アノテーション自体は省略可能）
 
+### イメージで理解する：Springは何を2段階でやっているか
+
+Springがやっていることは、大きく分けて2つのステップ。
+
+1. **「これは部品です」と目印を付ける（`@Service`/`@RestController`など）**: アプリ起動時、Springはこれらの目印が付いたクラスを**全部探し出し**、それぞれ1個ずつインスタンスを自動生成して、**部品倉庫（IoCコンテナ）**に保管しておく
+2. **倉庫から取り出して自動で渡す（コンストラクタでの受け取り＝`@Autowired`の実体）**: `GreetingController`が`GreetingService`を必要としている（コンストラクタで受け取ろうとしている）とき、Springは「倉庫の中に`GreetingService`型のものはあるか？」と探し、見つけたら自動的に渡す
+
+この目印（`@Service`など）がないクラスは、Springがそもそも存在に気づかないため倉庫に入らず、DIで受け取ろうとしてもエラーになる。
+
 ### 実行・動作確認
 
 ```bash
