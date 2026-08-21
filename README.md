@@ -47,8 +47,8 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 21)  # HomebrewのJDKと混同し�
 mvn spring-boot:run
 ```
 
-デフォルトはポート8080だが、他プロジェクトと衝突する場合は`src/main/resources/application.properties`の`server.port`で変更できる（このリポジトリでは`8081`に設定済み）。動作確認は`curl`で行う。
+デフォルトはポート8080だが、他プロジェクトと衝突する場合は`src/main/resources/application.properties`の`server.port`で変更できる（このリポジトリでは`8090`に設定済み）。動作確認は`curl`で行う。
 
 ```bash
-curl -s http://localhost:8081/tasks; echo
+curl -s http://localhost:8090/tasks; echo
 ```
