@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -20,18 +21,26 @@ public class TaskController {
   }
 
   @GetMapping("/tasks")
-  public List<Task> getAllTasks() {
-    return taskService.getAll();
+  public List<TaskResponseDto> getAllTasks() {
+    List<Task> tasks = taskService.getAll();
+    return tasks.stream()
+      .map(TaskResponseDto::new)
+      .collect(Collectors.toList());
   }
 
   @GetMapping("/tasks/{id}")
-  public Task getTaskById(@PathVariable int id) {
-    return taskService.getById(id);
+  public TaskResponseDto getTaskById(@PathVariable int id) {
+    Task task = taskService.getById(id);
+    if (task == null) {
+      return null;
+    }
+    return new TaskResponseDto(task);
   }
 
   @PostMapping("/tasks")
-  public Task createTask(@RequestBody Task task) {
-    return taskService.create(task.getTitle());
+  public TaskResponseDto createTask(@RequestBody TaskRequestDto request) {
+    Task task = taskService.create(request.getTitle());
+    return new TaskResponseDto(task);
   }
 
   @DeleteMapping("/tasks/{id}")
@@ -40,8 +49,12 @@ public class TaskController {
   }
 
   @PutMapping("/tasks/{id}")
-  public Task updateTask(@PathVariable int id, @RequestBody Task task) {
-    return taskService.update(id, task.getTitle());
+  public TaskResponseDto updateTask(@PathVariable int id, @RequestBody TaskRequestDto request) {
+    Task task = taskService.update(id, request.getTitle());
+    if (task == null) {
+      return null;
+    }
+    return new TaskResponseDto(task);
   }
 
 }
