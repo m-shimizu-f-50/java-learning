@@ -23,7 +23,7 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 - [x] 認証認可（Spring Security）
 - [ ] 実務でよくある追加パターンをTaskアプリに実装（ポートフォリオ作成の代わり。学習用リポジトリのため成果物としてのポートフォリオは不要と判断し、実務でどう使われるかの理解を優先する方針に変更）
   - [x] DTO（Data Transfer Object）
-  - [ ] バリデーション（`@Valid`）
+  - [x] バリデーション（`@Valid`）
   - [ ] 例外ハンドリングの一元化（`@ControllerAdvice`）
   - [ ] ページネーション
 
