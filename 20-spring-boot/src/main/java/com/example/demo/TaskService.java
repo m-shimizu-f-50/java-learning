@@ -19,7 +19,7 @@ public class TaskService {
 
   // 指定のIDのタスクを取得するメソッド
   public Task getById(int id) {
-    return taskRepository.findById(id).orElse(null); // Optional<Task>で返ってくるので、.orElse(null)を付ける
+    return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
   }
 
   // タスクを追加するメソッド
@@ -37,10 +37,9 @@ public class TaskService {
   // タスクを更新するメソッド
   public Task update(int id, String title) {
     Task task = getById(id);
-    if (task != null) {
-      task.setTitle(title);
-      taskRepository.save(task);
-    }
+    task.setTitle(title);
+    taskRepository.save(task);
+    
     return task;
   }
 }

@@ -8,5 +8,4 @@ public class Main {
     bankAccount.setBalance(3000);
     System.out.println("正常：" + bankAccount.getBalance());
   }
-  
 }
