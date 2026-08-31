@@ -34,9 +34,6 @@ public class TaskController {
   @GetMapping("/tasks/{id}")
   public TaskResponseDto getTaskById(@PathVariable int id) {
     Task task = taskService.getById(id);
-    if (task == null) {
-      return null;
-    }
     return new TaskResponseDto(task);
   }
 
@@ -54,9 +51,6 @@ public class TaskController {
   @PutMapping("/tasks/{id}")
   public TaskResponseDto updateTask(@PathVariable int id, @Valid @RequestBody TaskRequestDto request) {
     Task task = taskService.update(id, request.getTitle());
-    if (task == null) {
-      return null;
-    }
     return new TaskResponseDto(task);
   }
 
