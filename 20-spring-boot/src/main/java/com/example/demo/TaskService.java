@@ -1,7 +1,10 @@
 package com.example.demo;
 
+
 import org.springframework.stereotype.Service;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 @Service
 public class TaskService {
@@ -13,8 +16,8 @@ public class TaskService {
   }
 
   // 全件取得するメソッド
-  public List<Task> getAll() {
-    return taskRepository.findAll();
+  public Page<Task> getAll(Pageable pageable) {
+    return taskRepository.findAll(pageable);
   }
 
   // 指定のIDのタスクを取得するメソッド

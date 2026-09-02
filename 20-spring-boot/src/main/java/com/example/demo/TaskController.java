@@ -9,10 +9,9 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -24,11 +23,8 @@ public class TaskController {
   }
 
   @GetMapping("/tasks")
-  public List<TaskResponseDto> getAllTasks() {
-    List<Task> tasks = taskService.getAll();
-    return tasks.stream()
-      .map(TaskResponseDto::new)
-      .collect(Collectors.toList());
+  public Page<TaskResponseDto> getAllTasks(Pageable pageable) {
+    return taskService.getAll(pageable).map(TaskResponseDto::new);
   }
 
   @GetMapping("/tasks/{id}")
