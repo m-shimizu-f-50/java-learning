@@ -44,10 +44,32 @@ public class Student {
 
 フィールドを`private`にし、外部からは`getter`/`setter`経由でのみアクセスさせる。`setter`にバリデーションを入れることで「不正な値を代入させない」というルールを強制できる。
 
+### setterは必ず用意しなければいけないものではない
+
+```java
+public class BankAccount {
+    private int balance;
+
+    public void withdraw(int amount) {
+        if (amount > balance) {
+            System.out.println("残高不足です");
+        } else {
+            balance -= amount;
+        }
+    }
+    // setBalance(int balance) は用意しない
+}
+```
+
+このクラスには`setBalance(int balance)`のような無制限setterがなく、残高を変更する手段は`withdraw()`だけ。もし`setBalance`を公開してしまうと、外部から`account.setBalance(-500)`のように直接書き換えられ、`withdraw()`が持つ「残高不足なら弾く」というルールを完全にすり抜けられてしまう。
+
+**カプセル化の目的は「private化してgetter/setterを付けること」自体ではなく、「オブジェクトが常に正しい状態（不変条件）を保てるように、外部からの変更経路をコントロールすること」**。フィールドに対して意味を持つ操作（`withdraw()`/`deposit()`など、業務的な名前のメソッド）だけを公開する方が、何でも書き換えられる無制限setterより安全な場合が多い。getter/setterは「デフォルトの選択肢」であり「必ず付けるべきもの」ではない。
+
 ## 覚えておくべきルール・規約
 
 - フィールドは基本`private`にし、`public`な`getter`/`setter`で外部に公開する
 - `setter`に検証ロジックを入れることで、不正な値の代入を防げる
+- setterは必須ではない。無制限に値を書き換えられるsetterより、`withdraw()`のような意味のある操作だけを公開する方が不変条件を守りやすい
 - JSにはネイティブな`private`/`protected`の概念がない（`#field`はES2022以降の比較的新しい機能）ため、Javaでは最初から明確に区別されている点を意識する
 
 ## 演習
