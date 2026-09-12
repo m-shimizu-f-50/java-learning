@@ -90,11 +90,25 @@ curl -G "http://localhost:8080/greet" --data-urlencode "name=太郎"
 # こんにちは、太郎さん
 ```
 
+### なぜDIだとテストしやすくなるのか（Mockitoとの接続）
+
+`22-static`の復習で扱った`TaskServiceTest`を思い出すと、モックにした`TaskRepository`を`new TaskService(fakeRepository)`のようにコンストラクタへ直接渡してテストしていた。これができるのは、`TaskService`が`TaskRepository`を**自分で`new`せず、コンストラクタで外から受け取る**（DI）形になっているから。
+
+```java
+// もしTaskServiceが自分でnewしていたら
+class TaskService {
+    private TaskRepository taskRepository = new TaskRepository(); // 引数を渡す入口がない
+}
+```
+
+このように内部で`new`していると、テスト側は`fakeRepository`を差し込む入口（コンストラクタ引数）自体が存在せず、必ず本物の`TaskRepository`が使われてしまう。DIによって「本物を渡すか、モックを渡すか」を**呼び出し側（本番コードかテストコードか）が決められる**ようになる、というのがDIの実務上の大きな利点。本番ではSpringのIoCコンテナが本物を渡し、テストでは自分でモックを渡す——同じ入口（コンストラクタ）を使い分けているだけ。
+
 ## 覚えておくべきルール・規約
 
 - `@Component`系のアノテーションが付いていないクラスはSpringに認識されず、DIの対象にならない
 - コンストラクタが1つだけのクラスは`@Autowired`を省略できる（Springが自動的に注入ポイントと判断する）
 - 日本語などマルチバイト文字を含むURLを`curl`で叩く場合は`--data-urlencode`でURLエンコードする必要がある（生の文字列だとTomcatが`400 Bad Request`を返す）
+- コンストラクタで外から受け取る（自分で`new`しない）ことで、本番ではSpringが本物を、テストでは自分でモックを注入できる。DIは「テストしやすくするための仕組み」ではなく、その結果として得られる利点の1つ
 
 ## 演習
 
@@ -102,6 +116,7 @@ curl -G "http://localhost:8080/greet" --data-urlencode "name=太郎"
 
 1. `GreetingService`: `@Service`を付け、`greet(String name)`で挨拶文を返す
 2. `GreetingController`: `@RestController`を付け、コンストラクタで`GreetingService`をDIし、`GET /greet?name=xxx`で呼び出す
+3. （`review/22-static`の復習時に追加）`MessageFormatter`（`@Component`）と、それをコンストラクタでDIする`NotificationService`（`@Service`）。`NotificationServiceTest`で`MessageFormatter`をモックに差し替え、DIがテストの差し替えを可能にしていることを確認
 
 ## つまずきの分析
 
@@ -109,4 +124,12 @@ curl -G "http://localhost:8080/greet" --data-urlencode "name=太郎"
 - `GreetingService.java`のファイル名の先頭に誤って半角スペースが入っていた（` GreetingService.java`）。ファイル名とpublicクラス名の一致というJavaのルール（[01. 変数と型](01-variables-types.md)で学習済み）に反するため、リネームして解決
 - DI/IoCの概念説明だけでは理解しにくかったため、`Car`/`Engine`という身近な例で「自分でnewする」vs「外から受け取る」の対比を先に示し、その後で`@Service`/`@RestController`の実コードに繋げる説明順にしたところ理解できた
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、`curl`で`GET /greet?name=太郎`が`"こんにちは、太郎さん"`を返すことを確認済み。
+### 復習（`review/22-static`）時のつまずき：「誰がインスタンスを作るか」を説明できなかった
+
+**何が起きたか**: `OrderService`が`PaymentClient`をコンストラクタで受け取る例を提示し、「`new PaymentClient()`がどこにもないのに、なぜインスタンスが入っているのか」と聞いたところ、説明できなかった。自分が書いた`TaskController`が`TaskService`をどう受け取っていたかを聞いても分からなかった。
+
+**なぜ**: DI/IoCは初回学習時に一度理解できていたが、「IoCコンテナが部品を生成して倉庫に保管し、必要な場所に自動的に渡す」という仕組み自体を、時間が経って忘れていた（概念としては合っていたが、想起できなかった）。
+
+**教訓**: DI/IoCのような「裏側の仕組み」は、一度説明を聞いて納得しても、間隔を空けると具体的な仕組み（誰が・いつ・何を渡すか）を忘れやすい。`Car`/`Engine`の対比と「部品倉庫」の例えを再度示すと思い出せた。加えて、「なぜDIが嬉しいのか」を`Mockito`でのモック差し替え（テストで本物の代わりにモックを注入できる）という具体的な実務上の利点と結びつけると、単なる仕組みの説明より記憶に残りやすい。
+
+演習コードは `20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、`curl`で`GET /greet?name=太郎`が`"こんにちは、太郎さん"`を返すことを確認済み。`NotificationServiceTest`は`mvn test`でパス済み。
