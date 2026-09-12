@@ -5,25 +5,30 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 class TaskServiceTest {
 
   @Test
-  /* getAll_returnsAllTasksFromRepository: mock(TaskRepository.class)で偽物を作り、when(fakeRepository.findAll()).thenReturn(...)で戻り値を設定。taskService.getAll()を呼び、返ってきたリストが期待通りかassertEqualsで確認
+  /* getAll_returnsAllTasksFromRepository: mock(TaskRepository.class)で偽物を作り、when(fakeRepository.findAll(pageable)).thenReturn(...)で戻り値を設定。taskService.getAll(pageable)を呼び、返ってきたPageの中身が期待通りかassertEqualsで確認
   */
   void getAll_returnsAllTasksFromRepository() {
     // ①「本物のTaskRepositoryの代わりに使う、**偽物（モック）**を作ってください」という命令。fakeRepositoryはまだ何も設定されていない、空っぽの偽物。
     TaskRepository fakeRepository = mock(TaskRepository.class);
-    // ②「もしfakeRepository.findAll()が呼ばれたら（when）、Task 1とTask 2の入ったリストを返してください（thenReturn）」という演技の台本を設定している。本物のDBには一切アクセスしない。
-    when(fakeRepository.findAll()).thenReturn(List.of(
+    // ②ページネーション対応後、findAll()はPageableを受け取りPage<Task>を返すようになったため、台本もそれに合わせる
+    Pageable pageable = Pageable.unpaged();
+    when(fakeRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of(
         new Task("Task 1", false),
-        new Task("Task 2", true)));
-  
+        new Task("Task 2", true))));
+
     // ③TaskServiceのコンストラクタにfakeRepositoryを渡す。これでTaskServiceは本物のDBにアクセスせず、fakeRepositoryを通してモックのデータを返すようになる。
     TaskService taskService = new TaskService(fakeRepository);
-    // ④taskService.getAll()を呼ぶと、fakeRepository.findAll()が呼ばれ、②で設定したリストが返ってくる。
-    List<Task> tasks = taskService.getAll();
-  
+    // ④taskService.getAll(pageable)を呼ぶと、fakeRepository.findAll(pageable)が呼ばれ、②で設定したPageが返ってくる。
+    Page<Task> result = taskService.getAll(pageable);
+    List<Task> tasks = result.getContent();
+
     // ⑤返ってきたリストの中身をassertEqualsで確認。Task 1とTask 2が正しく返ってきているか、doneの状態も確認。
     assertEquals("Task 1", tasks.get(0).getTitle());
     assertFalse(tasks.get(0).isDone());
