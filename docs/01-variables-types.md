@@ -44,11 +44,29 @@ String name = "Alice";
 final double TAX_RATE = 0.1;
 ```
 
+### BigDecimalの使い方
+
+`double`は`+`/`*`のような演算子がそのまま使えるが、`BigDecimal`はオブジェクトなので**演算子が使えず、メソッドで計算する**。
+
+```java
+BigDecimal unitPrice = new BigDecimal("250.5"); // doubleではなく文字列から生成する
+BigDecimal quantity = new BigDecimal(3);
+BigDecimal taxRate = new BigDecimal("0.1");
+
+BigDecimal total = unitPrice.multiply(quantity);              // unitPrice * quantity に相当
+BigDecimal totalWithTax = total.multiply(BigDecimal.ONE.add(taxRate)); // total * (1 + taxRate) に相当
+```
+
+- **文字列から生成する**：`new BigDecimal(250.5)`のように`double`のまま渡すと、`double`が既に持っている誤差をそのまま受け継いでしまう。`new BigDecimal("250.5")`のように文字列で渡せば、書かれた数字を誤差なく正確に読み取れる
+- **演算子の代わりにメソッドを使う**：`+`→`add()`、`-`→`subtract()`、`*`→`multiply()`、`/`→`divide()`
+- **`BigDecimal.ONE`**：「1」を表す定数。`1 + 何か`のような計算に使う（`BigDecimal.ZERO`、`BigDecimal.TEN`も同様に用意されている）
+
 ## 覚えておくべきルール・規約
 
 - 実行可能なコードは必ずクラス＋`main`メソッドの中に書く（トップレベルに文を書けない）
 - 1ファイルにつき`public`クラスは1つまで。ファイル名とpublicクラス名を完全一致させる（拡張子`.java`を除く、数字始まり・ハイフンは不可）
 - `double`型の小数計算には誤差が出る。金額など正確性が必要な場面では`BigDecimal`を使う
+- `BigDecimal`は`double`ではなく文字列から生成する。`+`/`-`/`*`/`/`のような演算子は使えず、`add()`/`subtract()`/`multiply()`/`divide()`のようなメソッドで計算する
 
 ## 演習
 
@@ -80,8 +98,23 @@ final double TAX_RATE = 0.1;
 
 ### doubleの小数誤差
 
-**何が起きたか**: `826.65` を計算したはずが `826.6500000000001` という結果になった。
+**何が起きたか**: `826.65` を計算したはずが `826.6500000000001` という結果になった。復習時にも、単純な`0.1 + 0.2`を実行すると`0.3`ではなく`0.30000000000000004`になることを確認した。
 
-**なぜ**: `double` は2進数表現のため、`0.1` のような10進小数を正確に表現できない。JSの `Number` 型（IEEE754倍精度浮動小数点）も同じ制約を持つが、JS開発では金額計算をそこまで厳密に扱う場面が少なく意識していなかった。
+**なぜ**: `double` は2進数表現のため、`0.1` のような10進小数を正確に表現できない。10進数で`1/3`が`0.333...`と無限に続くのと同じように、`0.1`も2進数では無限に続く小数になり、`double`の固定bit数では途中で切り捨てられる。JSの `Number` 型（IEEE754倍精度浮動小数点）も同じ制約を持つが、JS開発では金額計算をそこまで厳密に扱う場面が少なく意識していなかった。
 
-**教訓**: 実務で金額など正確性が求められる値を扱う場合は `BigDecimal` を使う（応用トピックで扱う予定）。
+**教訓**: 実務で金額など正確性が求められる値を扱う場合は `BigDecimal` を使う。
+
+### 復習（`review/25-bigdecimal`）：BigDecimal初実装でのつまずき
+
+**何が起きたか**: 上記の教訓は理解していたが、実際に`BigDecimal`を初めて実装した際、以下の誤りが連鎖的に発生した。
+
+1. `BigDecimal unitPrice = 250.5;`：`double`のリテラルを直接代入しようとしてコンパイルエラー（`BigDecimal`は`new BigDecimal("250.5")`のように文字列から生成する必要がある）
+2. `final decimal taxPate = 0.1;`：Javaに存在しない`decimal`という型名を使用（C#など他言語の型名との混同）
+3. `double total = quantity * unitPrice;`：`BigDecimal`に対して`*`演算子を使おうとしてコンパイルエラー（`multiply()`のようなメソッドを使う必要がある）
+4. 変数名`taxPate`（タイプミス）で宣言したのに、別の箇所で`taxRate`という存在しない変数を参照してコンパイルエラー
+
+**なぜ**: 「なぜ`BigDecimal`を使うか」という設計判断は理解していたが、「具体的にどう書くか」という構文は初めて触れるものだったため、`double`と同じ演算子の感覚で書いてしまった。`BigDecimal`はオブジェクトであり、プリミティブ型のような演算子は使えない、という違いを実装しながら体感した。
+
+**教訓**: 新しいクラス（特に`BigDecimal`のような「演算子が使えないオブジェクト」）を初めて使うときは、コンパイルエラーを1つずつ順番に読み、エラーメッセージが指している行・型を確認しながら直すと、構文の違いに気づきやすい。
+
+演習コードは `review/25-bigdecimal/Main.java`。コンパイル・実行して動作確認済み（税込価格：826.65、`double`版で出た誤差が発生しないことを確認）。
