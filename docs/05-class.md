@@ -24,6 +24,33 @@ Book book = new Book("Java入門", 2500);
 
 インスタンス自身を指す。JSの `this` と近い感覚だが、挙動はより単純（呼び出し方によって指すものが変わることはない）。
 
+### thisが無いとどうなるか（フィールドと引数の名前が同じ場合）
+
+```java
+public class Wallet {
+    int balance;
+
+    public Wallet(int balance) {
+        balance = balance; // thisが無い
+    }
+}
+```
+
+```java
+Wallet w = new Wallet(500);
+System.out.println(w.balance); // 0（500ではない！）
+```
+
+コンストラクタの中には「フィールドの`balance`」と「引数の`balance`」という同じ名前の変数が2つ存在する。`this`が無いと、Javaは**より近くにあるスコープの変数（引数）を優先**するため、`balance = balance;`の左右どちらも引数の方を指してしまう。結果、引数が自分自身に代入するだけの無意味な行になり、フィールドは初期値の`0`（`int`のデフォルト値）のまま変わらない。
+
+```java
+public Wallet(int balance) {
+    this.balance = balance; // 左はフィールド、右は引数と明確に区別される
+}
+```
+
+`this.balance`と書くことで「フィールドの方」だと明示され、意図通り`500`が代入される。**フィールド名と引数名を同じにする場合、`this`は省略できない**（省略するとコンパイルエラーにはならず、静かに意図と違う動作になるので特に注意）。
+
 ### ファイル構成
 
 データを表すクラス（`Book`）と実行の入口（`Main`）は別ファイルに分けるのが一般的。
@@ -38,6 +65,7 @@ javac Book.java Main.java
 
 - 1ファイルに`public`クラスは1つまで、ファイル名と一致させる
 - コンストラクタはクラス名と同名、戻り値の型は書かない
+- フィールド名と引数名が同じ場合、`this.フィールド名 = 引数名;`のように`this`を付けないと、両方とも引数の方を指してしまい、フィールドが初期化されない（コンパイルエラーにはならず静かに動作がおかしくなる）
 - データを表すクラスと実行の入口（Main）は別ファイルに分けるのが一般的
 - 複数ファイルは`javac A.java B.java`のようにまとめてコンパイルできる
 
@@ -59,6 +87,10 @@ javac Book.java Main.java
 
 **教訓**: エディタ上のエラー表示とコンパイル結果が食い違う場合は、まず実際にコンパイルして確かめる。表示側の問題であれば `Java: Clean Java Language Server Workspace` やウィンドウリロードで解消できる。
 
+### 復習（`review/29-class`）：thisを使った実装で誤解なし
+
+今回の復習では`this.price`/`this.name`のようにフィールドと引数を正しく区別でき、目立ったつまずきはなかった。フィールドを`private`にする判断（`11-encapsulation`の復習）も自然に活かされていた。
+
 ---
 
-演習コードは `05-class/Book.java`, `05-class/Main.java`。コンパイル・実行して動作確認済み。
+演習コードは `05-class/Book.java`, `05-class/Main.java`。コンパイル・実行して動作確認済み。復習演習は `review/29-class/Product.java`, `Main.java`。コンパイル・実行して動作確認済み（消しゴム3000円、鉛筆450円）。
