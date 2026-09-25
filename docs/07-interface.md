@@ -109,6 +109,29 @@ for (Animal a : animals) {
 
 `@Override`でオーバーライドされたメソッドが実行時に正しく選ばれる、というのがまさにポリモーフィズムの実例。`implements`（インターフェース）でも`extends`（クラス継承）でも、「親の型（静的型）で扱いながら、実際には子の型（動的型）の実装が呼ばれる」という構造は共通している。
 
+### defaultメソッド：インターフェースに「中身のあるメソッド」を持たせる
+
+```java
+interface Greetable {
+    String getName();                    // 抽象メソッド（中身なし、実装必須）
+
+    default void greet() {               // defaultメソッド（中身あり、実装は任意）
+        System.out.println("こんにちは、" + getName() + "さん");
+    }
+}
+
+class Student implements Greetable {
+    public String getName() { return "田中"; }
+    // greet()は実装しなくてもそのまま使える
+}
+```
+
+`default`を付けたメソッドは、インターフェース側に**すでに実装（中身）がある**。実装クラスは`getName()`のような抽象メソッドは必ず実装しなければならないが、`greet()`のような`default`メソッドは実装しなくてもそのまま使える。`13-abstract`の抽象クラスで見た「共通処理（中身あり）＋強制する部分（`abstract`、中身なし）が混在する」という構造が、インターフェースにも`default`を使うことで持ち込まれている。
+
+**なぜ嬉しいか**：既に100個のクラスが実装している`Greetable`インターフェースに、後から新しいメソッド`bye()`を追加したい場合。`bye()`を普通の抽象メソッドとして追加すると、既存の100個全部に実装を追加しないとコンパイルが通らなくなる。`default void bye() { ... }`として追加すれば、既存のクラスは**1つも変更せずに**そのまま動き続ける。Java 8で`List`などの既存インターフェースに新機能（`forEach`など）を追加する際に、実際にこの仕組みが使われた。
+
+**罠：`Object`の`final`メソッドと名前が衝突する**。`Object`クラス（[28. Objectクラス](28-object-class.md)）には、スレッド制御用に`wait()`/`notify()`/`notifyAll()`という3つの`final`メソッドが元々存在する。`final`メソッドはオーバーライドできないため、インターフェースで`default void notify() { ... }`のようにこれらと同じ名前のメソッドを定義すると、実装クラスは既に`Object`から継承した`final`な`notify()`と衝突してコンパイルエラーになる（`Notifiableのnotify()はObjectのnotify()をオーバーライドできません`）。`wait`/`notify`/`notifyAll`という名前は避ける。
+
 ### 継承とインターフェースの使い分け
 
 - 継承（`extends`）: **is-a**（〜の一種である）＝「AはBの一種と言えるか？」が本当に成り立つ関係
@@ -131,6 +154,9 @@ class CassetteTape implements Playable { ... } // OK: 「カセットテープ�
 - インターフェースのメソッドは実装側で`public`を省略できない（暗黙的に`public`のため、より制限を強める変更は不可）
 - `implements`は複数指定できる（`extends`は1つだけ）
 - `implements A, B`のようにカンマ後にスペースを入れるのがJavaの慣習
+- `default`メソッドは中身を持てる。実装クラスは実装しなくてもそのまま使える。既存クラスを変更せず新機能を追加できる利点がある
+- インターフェースのメソッド名は`wait`/`notify`/`notifyAll`（`Object`の`final`メソッド）を避ける。名前が衝突するとオーバーライド不可でコンパイルエラーになる
+- `void`のメソッドは戻り値を持たないため、`System.out.println(obj.voidMethod())`のように式として使おうとするとエラーになる。呼ぶだけで良い（`obj.voidMethod();`）
 
 ## 演習
 
@@ -147,6 +173,16 @@ class CassetteTape implements Playable { ... } // OK: 「カセットテープ�
 ## つまずきの分析
 
 今回は目立ったつまずきなし。インターフェース実装メソッドに`public`を正しく付けられていた（JS経験者が見落としがちなポイント）。
+
+### 復習（`review/31-interface`）：defaultメソッド名がObjectのfinalメソッドと衝突
+
+**何が起きたか**: `default void notify() { ... }`という名前で実装したところ、「`Notifiableのnotify()`は`Objectのnotify()`をオーバーライドできません（オーバーライドされたメソッドはfinalです）」というコンパイルエラーが発生した。名前を`sendNotification()`に変更後、`System.out.println(emailAlert.sendNotification())`でも「`void`型はここで使用できません」という別のエラーが発生した。
+
+**なぜ**: 1つ目は、`Object`クラスに`wait`/`notify`/`notifyAll`という`final`メソッドが元々存在することを知らず、たまたま同じ名前を選んでしまったため。2つ目は、`sendNotification()`が`void`（戻り値なし、メソッド内で自分で`println`している）であることを踏まえず、その戻り値をさらに`println`で表示しようとしたため。
+
+**教訓**: `Object`の`final`メソッド（`wait`/`notify`/`notifyAll`のほか、`equals`/`hashCode`/`toString`/`getClass`も存在。[28. Objectクラス](28-object-class.md)参照）と同じ名前をメソッドに使うと、意図しない衝突が起きる可能性がある。また`void`メソッドは「呼ぶだけ」で、戻り値として扱おうとするとエラーになる。
+
+演習コードは `review/31-interface/Notifiable.java`, `EmailAlert.java`, `SmsAlert.java`, `Main.java`。コンパイル・実行して動作確認済み（通知:Eメール、通知:SMS）。
 
 ---
 
