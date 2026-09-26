@@ -64,12 +64,50 @@ numbers.remove(Integer.valueOf(2)); // 値の2を削除したい場合はこう�
 
 **注意**: 「`Integer.valueOf(...)`を使えば安全」ではない。本当にインデックス指定したい場面で`Integer.valueOf(...)`を使うと、今度は逆に「値のつもりが実は正しいインデックス指定だった」という逆方向の事故になる。**安全な方を選ぶのではなく、自分の意図（インデックスか値か）と一致する書き方を選ぶ**のが正しい判断基準。
 
+### 拡張for文の中でremoveすると何が起きるか（ConcurrentModificationException）
+
+```java
+List<String> fruits = new ArrayList<>();
+fruits.add("りんご");
+fruits.add("バナナ");
+fruits.add("ぶどう");
+
+for (String fruit : fruits) {
+    if (fruit.equals("りんご")) {
+        fruits.remove(fruit); // 危険：実行時にConcurrentModificationExceptionの可能性
+    }
+}
+```
+
+拡張for文は裏側で`Iterator`（イテレータ、リストを1つずつ取り出していく専用の道具）を自動的に使っている。イテレータは「リストが何回変更されたか（`modCount`）」を最初に記憶しておき、次の要素を取り出す（`next()`）たびにその回数が変わっていないかチェックする。`fruits.remove(fruit)`のように**イテレータを介さずに直接**リストを変更すると、`modCount`がこっそり増え、次に`next()`が呼ばれたタイミングで初めて食い違いに気づき、`ConcurrentModificationException`を投げる。
+
+**罠**: このエラーは**削除する要素によって発生したりしなかったりする**。削除した要素が最後から2番目で、ループがちょうどそこで終わる場合、次の`next()`が二度と呼ばれず、食い違いに気づく機会が来ないためエラーが出ない。「エラーが出なかったから安全」ではなく、**データの中身次第でエラーになる不安定なコード**であることに注意する。
+
+### 安全に削除する方法：removeIfとIterator.remove()
+
+```java
+// 方法1: removeIf（ラムダ式で条件を渡す、簡潔で推奨）
+fruits.removeIf(fruit -> fruit.equals("りんご"));
+
+// 方法2: Iteratorを直接使う（removeIfの内部で行われていることと同じ）
+Iterator<String> it = fruits.iterator();
+while (it.hasNext()) {
+    String fruit = it.next();
+    if (fruit.equals("りんご")) {
+        it.remove(); // イテレータ自身のremove()なので、modCountの整合性が保たれる
+    }
+}
+```
+
+`removeIf`は「条件に一致する要素をまとめて安全に削除する」専用メソッドで、内部では`Iterator.remove()`と同じ仕組みが使われている。ループの外で1回呼ぶだけでよく、拡張for文と組み合わせて使うものではない。**単発で1つの要素を消したいだけ（ループの外）なら`list.remove(...)`で問題ない**。危険なのは「ループしながら`list.remove(...)`を直接呼ぶ」場合だけ。
+
 ## 覚えておくべきルール・規約
 
 - 配列は固定長、`ArrayList`は可変長
 - `List<T>`はインターフェース、`ArrayList<T>`は実装クラス。宣言は`List<T> x = new ArrayList<>();`とするのが一般的
 - プリミティブ型はリストに直接入れられない（ラッパークラスを使う）
 - `List<Integer>`への`remove()`はインデックスと値の解釈が衝突する。値を消したい場合は`Integer.valueOf(...)`で明示する
+- 拡張for文の中で直接`list.remove(...)`するとエラーが起きたり起きなかったりする不安定なコードになる（`ConcurrentModificationException`）。ループしながら削除したい場合は`removeIf`または`Iterator.remove()`を使う
 
 ## 演習
 
@@ -93,3 +131,13 @@ numbers.remove(Integer.valueOf(2)); // 値の2を削除したい場合はこう�
 **なぜ**: `remove(2)`の`2`を「値の202」のつもりで書いてしまい、インデックス（0番目から数えて2番目）として解釈されることを踏まえていなかった。まさにこのトピックで学んだ罠そのものを、演習コード自身で再現してしまった。
 
 **教訓**: `remove(int)`を書くときは、コメントで「消したい値」ではなく「何番目を消しているか」を書く（またはコメント自体を実行結果で検算する）と、この種の不一致に気づきやすい。
+
+### 復習（`review/32-collections`）：removeIfの引数を誤解
+
+**何が起きたか**: `tasks.removeIf(task)`のように、条件式（ラムダ式）ではなく1つの値（`String`の`task`）をそのまま渡してしまい、「`String`を`Predicate<? super String>`に変換できません」というコンパイルエラーになった。
+
+**なぜ**: `removeIf`が「1つの要素を受け取ってtrue/falseを判定する関数」を引数に取ることを踏まえず、for文の中の変数`task`をそのまま渡せば「これを削除して」という意味になると考えてしまった。
+
+**教訓**: `removeIf`は`list.remove(値)`とは引数の種類が全く違う（値ではなく判定ロジック）。`task -> task.equals("resume")`のようなラムダ式で「何を条件に削除するか」を渡す。また`removeIf`はリスト全体からまとめて削除するメソッドなので、`for`ループの中で1要素ずつ呼ぶものではなく、ループの外で1回だけ呼ぶ。
+
+演習コードは `review/32-collections/Main.java`。コンパイル・実行して動作確認済み（`[buy milk, call mom]`）。
