@@ -69,11 +69,52 @@ Streamは「生成 → 中間操作（複数つなげられる） → 終端操�
 
 Streamの操作は元のリストを変更せず、新しい結果を作る（JSの`map`/`filter`が新配列を返すのと同じ）。
 
+### Streamは使い捨て：一度終端操作を呼んだら再利用できない
+
+```java
+Stream<Integer> stream = numbers.stream().filter(n -> n > 10);
+long count = stream.count();          // 終端操作①
+long sum = stream.mapToInt(n -> n).sum(); // 終端操作②：同じstream変数を再利用
+// IllegalStateException: stream has already been operated upon or closed
+```
+
+`List`は「値を保存しておく箱」なので何度でも中身を見られるが、`Stream`は名前の通り「流れ」——ベルトコンベアのように要素が流れながら加工され、終端操作で流れきって処理が完了する**使い捨てのパイプライン**。一度終端操作（`count()`, `collect()`など）を呼ぶと、コンベアの上には何も残っていない。もう一度使いたい場合は`numbers.stream()`から**新しく作り直す**必要がある。
+
+### 終端操作の戻り値の型に注意する
+
+終端操作は「Streamの流れを終わらせて、最終結果を返す」操作。戻ってくるのは`Stream`ではなく、それぞれの操作に応じた具体的な型になる。
+
+```java
+List<Double> result = salaries.stream()...collect(Collectors.toList()); // collect()はList
+long count = salaries.stream()...count();                               // count()はlong
+```
+
+変数の型を`Stream`のままにしてしまうと型不一致でコンパイルエラーになる。`collect`なら`List`（や`Set`）、`count`なら`long`など、それぞれの終端操作が何を返すかに合わせて変数の型を宣言する。
+
+### mapの中での型変換ルール（04-methods、08-collectionsとの接続）
+
+```java
+List<Integer> salaries = ...;
+salaries.stream()
+    .map(n -> n * 1.1)   // nはInteger、1.1はdouble → 04-methodsのwidening規則でdoubleになる
+    .collect(Collectors.toList()); // → List<double>ではなくList<Double>（08-collectionsの規則）
+```
+
+`map`の中の計算結果の型がそのままStreamの要素の型になる。`int * double`は`04-methods`のオーバーロード解決と同じ理屈で`double`に自動変換される。その結果を`collect`する変数の型も、コレクションはプリミティブ型を直接扱えない（`08-collections`）という理由から`List<Double>`（ラッパークラス）にする必要がある。
+
+金額計算で誤差を避けたい場合は、`map`の中で`BigDecimal`を使うこともできる。
+
+```java
+.map(n -> new BigDecimal(n).multiply(new BigDecimal("1.1")))
+```
+
 ## 覚えておくべきルール・規約
 
 - Streamの中間操作（`filter`/`map`など）は元のコレクションを変更しない
 - 「以上」は`>=`、「より大きい」は`>`。境界値がある条件では取り違えに注意する
 - `mapToInt`は`Stream<Integer>`を`IntStream`に変換し、`.sum()`などの数値集計メソッドが使えるようになる
+- Streamは使い捨て。一度終端操作を呼ぶと再利用できず、`IllegalStateException`になる。再度使いたい場合は`.stream()`から作り直す
+- 終端操作の戻り値は`Stream`ではなく、操作に応じた具体的な型（`collect`なら`List`、`count`なら`long`など）。変数の型もそれに合わせる
 
 ## 演習
 
@@ -96,3 +137,13 @@ Streamの操作は元のリストを変更せず、新しい結果を作る（JS
 **修正後の結果**: `[apple, banana, grape]`で正しく5文字以上の単語がすべて抽出された。
 
 演習コードは `10-stream/Main.java`。コンパイル・実行して動作確認済み（結果[44, 60]、長い単語[apple, banana, grape]、合計文字数23）。
+
+### 復習（`review/34-stream`）：終端操作の戻り値をStream型で受けてしまう
+
+**何が起きたか**: `collect(Collectors.toList())`と`count()`（どちらも終端操作）の結果を受け取る変数を、両方とも`Stream`型で宣言してしまい、型不一致でコンパイルエラーになった。修正後も、`map(n -> n * 1.1)`の結果を`List<double>`（プリミティブ型のまま）で受けようとして再度エラーになった。
+
+**なぜ**: 「終端操作は最終結果を返す」ことは理解していたが、「その最終結果の具体的な型」（`collect`なら`List`、`count`なら`long`）まで意識できていなかった。また、`int * double`が`double`になる（`04-methods`）ことと、コレクションはプリミティブ型を直接扱えない（`08-collections`）という2つの既習ルールを、Streamの`map`の文脈で組み合わせて適用することができていなかった。
+
+**教訓**: Streamの型は「入り口（`stream()`で何のStreamか）」「中間操作でどう変わるか（`map`の計算結果の型）」「終端操作で何が返るか」の3点を順に追うと、変数の型が自然に決まる。既に学んだ型変換ルールは、Streamの中でもそのまま適用される。
+
+演習コードは `review/34-stream/Main.java`。コンパイル・実行して動作確認済み（`[352000.0, 451000.0]`（`BigDecimal`使用で誤差なし）、件数2）。
