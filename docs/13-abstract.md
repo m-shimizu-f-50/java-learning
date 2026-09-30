@@ -91,6 +91,36 @@ abstract class Employee {
 2. **ポリモーフィズムで統一的に扱える**: `Employee[]`配列に`FullTimeEmployee`も`PartTimeEmployee`も入れて、同じ`for`ループで処理できる（呼び出し側は種類を意識しなくていい）
 3. **実装忘れをコンパイル時に検出できる**: `calculateSalary()`を`abstract`にしているので、新しい社員種別を追加したときに実装を忘れるとコンパイルエラーになる（詳しくは下の「覚えておくべきルール・規約」を参照）
 
+### 直接インスタンス化できないことの確認
+
+```java
+Shape shape = new Shape(); // エラー: Shapeはabstractです。インスタンスを生成することはできません
+```
+
+抽象クラスは直接`new`できない。これは字面上のルールというより、実際にコンパイルするとその場でエラーとして検出される。
+
+### 抽象クラスはコンストラクタを持てる（直接newできないのに、なぜ必要か）
+
+```java
+abstract class Shape {
+    String color;
+    Shape(String color) { this.color = color; } // 抽象クラスもコンストラクタを持てる
+    abstract double calculateArea();
+}
+
+class Circle extends Shape {
+    double radius;
+    Circle(String color, double radius) {
+        super(color); // Shapeのコンストラクタが実行される
+        this.radius = radius;
+    }
+    @Override
+    double calculateArea() { return Math.PI * radius * radius; }
+}
+```
+
+`Shape`自身は`new`されないが、そのコンストラクタは**サブクラスが`new`されたときに`super(...)`経由で自動的に実行される**（[06. 継承](06-inheritance.md)の`super`の仕組みと同じ）。「直接`new`できない」＝「コンストラクタが不要」ではない。抽象クラスが持つ共通フィールド（`color`）の初期化処理を1箇所にまとめておき、どのサブクラスから`new`されても必ずこの初期化が実行される、という役割を持つ。
+
 ### インターフェースとの違い
 
 | | インターフェース | 抽象クラス |
@@ -105,6 +135,8 @@ abstract class Employee {
 - `abstract`メソッドは中身を書かない（子クラスで必ずオーバーライドしないとコンパイルエラー）
 - 「共通の実装 + 一部だけ強制的に実装させたい」場合は抽象クラス、「実装を一切持たず契約だけ」の場合はインターフェース
 - 抽象メソッドにせず「空の実装（`return 0;`など）」にしてしまうと、サブクラスが実装を忘れてもコンパイルは通ってしまい、実行時までバグに気づけない。`abstract`にすることで実装忘れを**コンパイル時に検出**できる
+- 抽象クラスは`new`できないが、コンストラクタは持てる。サブクラスが`super(...)`を呼んだときに実行される、共通フィールドの初期化処理として使う
+- 「強制する／される」の向きに注意：`abstract`メソッドを持つ抽象クラス（スーパークラス）側が、サブクラス側に実装を強制する（逆ではない）
 
 ## 演習
 
@@ -137,3 +169,13 @@ abstract class Employee {
 **教訓**: 抽象クラスは「共通の実装（普通のフィールド・メソッド）」と「強制したい部分（`abstract`メソッドのみ）」が**混在**するクラス。「全部中身がない」という極端なイメージを持ってしまったら、実際に書いたコード（`printName()`など）に中身があったかどうかを具体的に思い出すと訂正しやすい。
 
 演習コードは `13-abstract/Employee.java`, `FullTimeEmployee.java`, `PartTimeEmployee.java`, `Main.java`。コンパイル・実行して動作確認済み（Alice: 3000.0、Bob: 1600.0）。
+
+### 復習（`review/37-abstract`）：配列リテラルの書き方とコピペ時の消し忘れ
+
+**何が起きたか**: `Shape[] tests = [new Circle(...), new Rectangle(...)];`のように、`[...]`（JSの配列リテラル）で書いてしまいコンパイルエラーになった（`03-arrays`で学んだ通り、Javaの配列は`{...}`）。また、`Rectangle.calculateArea()`を`Circle`からコピーして作った際、`Math.PI * width * height`のように`Math.PI`の消し忘れが残っていた（正しくは`width * height`）。
+
+**なぜ**: 1つ目はJSの配列記法の癖が出た（`01`〜`03`で繰り返し出てきたパターン）。2つ目は、似た構造のクラスをコピーして作る際、コピー元固有のロジック（円周率）を消し忘れた。
+
+**教訓**: 配列の初期化は`{}`（波括弧）。コピーして新しいクラスを作るときは、コピー元固有の値・ロジック（定数、計算式など）が残っていないか、完成後に見直す。
+
+演習コードは `review/37-abstract/Shape.java`, `Circle.java`, `Rectangle.java`, `Main.java`。コンパイル・実行して動作確認済み（色: 赤, 面積: 78.53981633974483／色: 青, 面積: 12.25）。
