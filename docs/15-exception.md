@@ -9,6 +9,60 @@
 - **Unchecked例外**: コンパイラのチェック対象外の例外（`RuntimeException`の子孫）
 - **Throwable**: `throw`/`catch`できる全てのクラスの最上位の親。`Exception`も`Error`もこの子孫
 
+## なぜ例外処理を使うのか（Before/After比較）
+
+**Before: 例外を使わず、特別な値（エラーコード）で異常を表す場合**
+
+```java
+static double withdraw(double balance, double amount) {
+    if (amount > balance) {
+        return -1; // エラーを表す「特別な値」
+    }
+    return balance - amount;
+}
+```
+
+```java
+double result = withdraw(1000, 1500);
+if (result == -1) {        // 呼び出し側が毎回チェックしないといけない
+    System.out.println("残高不足です");
+} else {
+    System.out.println("新しい残高: " + result);
+}
+```
+
+**問題点:**
+
+- 呼び出し側が`if (result == -1)`のチェックを**書き忘れても、コンパイルは通ってしまう**。チェックを忘れると、`-1`という不正な値をそのまま「新しい残高」として扱ってしまう、気づきにくいバグになる
+- `-1`が「本当にありえない値か」はケースバイケース。`int`/`double`以外（`String`を返すメソッドなど）では「エラーを表す特別な値」の決め方に一貫性がなくなる
+- `A`が`B`を呼び、`B`が`C`を呼ぶ…というように処理が何段も連なっている場合、エラーを一番上まで伝えるには、**各階層が毎回「エラーが返ってきたか」をチェックして、さらに上に伝える**というコードを書く必要がある
+
+**After: 例外を使う場合**
+
+```java
+static double withdraw(double balance, double amount) throws InsufficientFundsException {
+    if (amount > balance) {
+        throw new InsufficientFundsException("残高不足です");
+    }
+    return balance - amount;
+}
+```
+
+```java
+try {
+    double result = withdraw(1000, 1500);
+    System.out.println("新しい残高: " + result);
+} catch (InsufficientFundsException e) {
+    System.out.println(e.getMessage());
+}
+```
+
+**得られるメリット:**
+
+1. **チェック漏れが起きない**：Checked例外は`try-catch`か`throws`のどちらかが無いとコンパイルエラーになる（`14-cast`で確認した「コンパイラが確実に判断できることはコンパイル時に検出する」の実例）。エラーコードのように「チェックし忘れてもコンパイルが通ってしまう」ことがない
+2. **正常系の処理と異常系の処理が分離される**：`try`ブロックの中は「正常にいった場合の処理」だけを書け、エラーが起きたときの対応は`catch`ブロックにまとめられる。`if (result == -1)`のようなチェックが本来のロジックに混ざらない
+3. **何階層離れていても、自動的に一番近い`catch`まで伝わる**：`A`が`B`を呼び、`B`が`C`を呼ぶ場合、`C`で例外が発生すると、途中の`B`が何も書かなくても自動的に`A`（または最初に`catch`した場所）まで伝わる。エラーコードのように、各階層が手動でチェックして伝え直す必要がない
+
 ## 全体像（まずここを掴む）
 
 例外処理は「異常が起きた時に、どう対応するか」を管理する仕組み。登場人物は4つだけ。
@@ -72,6 +126,32 @@ try {
 
 JSの例外にはこの区別がない。
 
+## catchは継承関係で判定される：複数catchの順番
+
+`catch`は、`instanceof`（[14. キャストとinstanceof](14-cast.md)）と同じ「is-aの判定」で動いている。投げられた例外オブジェクトが「`catch`に書かれた型、またはそのサブクラスか」を判定して捕まえる。
+
+```java
+class InvalidAgeException extends Exception { ... }
+
+try {
+    throw new InvalidAgeException("年齢が不正です");
+} catch (Exception e) {       // 親(広い網)
+    System.out.println("捕まえました: " + e.getMessage());
+}
+// → 捕まえられる。InvalidAgeExceptionはExceptionのサブクラスなので「is-a Exception」が成り立つ
+```
+
+複数の`catch`を並べる場合、**狭い網（サブクラス）を先に、広い網（親クラス）を後に**書く。逆にすると、狭い方の`catch`が絶対に実行されない（広い方で必ず先に捕まってしまう）ため、コンパイルエラーになる。
+
+```java
+try {
+    throw new InvalidAgeException("年齢が不正です");
+} catch (Exception e) { ... }              // 先に広い網
+} catch (InvalidAgeException e) { ... }    // エラー: 例外InvalidAgeExceptionはすでに捕捉されています
+```
+
+**なぜコンパイル時に検出できるのか**：クラスの継承関係（`InvalidAgeException extends Exception`）はソースコードに固定された事実で、プログラムの実行結果によって変わらない。コンパイラはソースコードを読むだけでこの継承関係を把握でき、「2つ目の`catch`は絶対に実行されない」と確実に判断できる。これは`14-cast`の`ClassCastException`（実行時の値次第で結果が変わるため、コンパイル時には判断できない）との対比になっている。
+
 ## try-with-resources
 
 ```java
@@ -88,6 +168,7 @@ try (FileReader reader = new FileReader("data.txt")) {
 - Checked例外（`Exception`継承）は`throws`宣言または`try-catch`が必須。書かないとコンパイルエラーになる
 - Unchecked例外（`RuntimeException`継承）はコンパイラのチェック対象外
 - `finally`は例外の有無にかかわらず必ず実行される
+- `catch`は`instanceof`と同じ「is-aの判定」で動く。複数`catch`を並べるときは、狭い網（サブクラス）を先に、広い網（親クラス）を後に書く。逆順だとコンパイルエラーになる
 - 「データ（フィールド）を持たず、引数を受け取って計算するだけの処理」は独立したクラスにせず`static`メソッドで十分（`11-encapsulation`のような状態を持つクラスとの使い分け）
 
 ## 演習
@@ -125,3 +206,13 @@ try (FileReader reader = new FileReader("data.txt")) {
 **なぜ**: 「エラーの原因が分かること」と「プログラムが動き続けられること」を区別できていなかった。両方とも発生箇所は分かるが、`try-catch`はその場で処理してプログラムの実行を継続できるのに対し、`main`まで回すと受け止める者がおらずプログラム全体が異常終了する、という違いが本質。
 
 **教訓**: 「Checked例外は`try-catch`で受け止めるべき」という結論だけでなく、「受け止めないとどうなるか」を実際にコード実行結果（正常終了 vs 異常終了）で比較すると、理由づけの誤りに気づきやすい。
+
+### 復習（`review/39-exception`）：catchの順番の勘違い
+
+**何が起きたか**: 「狭い網（`PaymentException`）を先に、広い網（`Exception`）を後に」という正しい順番で実装していたにもかかわらず、「コンパイルエラーになると思った」と申告した。実際には、エラーになるのは**逆の順番**（広い網を先に書いた場合）のみで、今回のコードは正しい順番だったためエラーにならなかった。
+
+**なぜ**: 「catchの順番にルールがある」こと自体は理解していたが、「どちらの順番がエラーになるのか」の向きを逆に記憶していた。
+
+**教訓**: 「catchの順番には意味がある」という事実だけでなく、「具体的にどちらが正しい順番か」を、`instanceof`の「狭い方が詳しい情報を持つ」という感覚と結びつけて覚える（狭い網を先に広げないと、情報の詳しい方が出番を失う）。
+
+演習コードは `review/39-exception/PaymentException.java`, `PaymentProcessor.java`, `Main.java`。コンパイル・実行して動作確認済み（決済エラー: 残高不足です、処理終了）。
