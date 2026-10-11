@@ -53,11 +53,38 @@ List<Integer> list = Arrays.asList(arr); // 固定長リストになる（add/re
 List<Integer> mutable = new ArrayList<>(Arrays.asList(arr)); // 可変長にしたい場合はArrayListで包む
 ```
 
+### Arrays.asList(int[])の罠：Integer[]を使う
+
+`asList`は`<T> List<T> asList(T... a)`という可変長引数（[16. 可変長引数](16-varargs.md)）で定義されている。`T`はジェネリクスの型パラメータ（[08. コレクション](08-collections.md)）で、プリミティブ型（`int`）は直接なれない。
+
+```java
+int[] arr = {1, 2, 3};
+List<Integer> list = Arrays.asList(arr); // コンパイルエラー: 推論変数Tには不適合な境界がある
+```
+
+型を明示しないと、エラーにすらならず**配列全体が1つの要素として扱われてしまう**（`T`が`int`ではなく`int[]`そのものに推論されるため）。
+
+```java
+List<int[]> list = Arrays.asList(arr);
+list.size(); // 1（3ではない！）
+```
+
+正しく変換したい場合は、最初から**`Integer[]`**（`int[]`ではない）で配列を作る。
+
+```java
+Integer[] arr = {1, 2, 3};
+List<Integer> list = Arrays.asList(arr);
+list.size(); // 3
+```
+
 ## 覚えておくべきルール・規約
 
 - 配列の中身を見るときは`Arrays.toString()`を使う（直接`println`しない）
 - `binarySearch`はソート済み配列が前提
 - `Arrays.asList()`が返すリストは固定長
+- `int[]`を`Arrays.asList()`に渡すと1要素のリストになってしまう。`Integer[]`を使う
+- クラス名は`ArraysUtil`ではなく`Arrays`（`java.util.Arrays`）。「配列ユーティリティ」というトピック名と混同しない
+- `Arrays.sort()`は配列専用。`List`をソートしたい場合は`list.sort(...)`（`09-lambda`）や`Collections.sort(list)`を使う
 
 ## 演習
 
@@ -73,3 +100,13 @@ List<Integer> mutable = new ArrayList<>(Arrays.asList(arr)); // 可変長にし�
 初回、`java.util.Arrays`とは無関係な`java.lang.reflect.Array`が誤ってimportされていた（未使用のまま残っていた）。動作には影響しないが、コミット前に削除して整理した。
 
 演習コードは `17-arrays-util/Main.java`。コンパイル・実行して動作確認済み（[1, 3, 5, 8, 9] / [1, 3, 5] / [0, 0, 0, 0] / インデックス4）。
+
+### 復習（`review/41-arrays-util`）：クラス名の混同とArrays.sort()の対象の誤り
+
+**何が起きたか**: `Arrays`ではなく`ArraysUtil`（「配列ユーティリティ」というトピック名から連想した、存在しないクラス名）を使ってしまい、「シンボルを見つけられません」エラーが発生した。修正後も、`Arrays.sort(scoreList)`のように`List`を渡そうとしてエラーになった（`Arrays.sort()`は配列専用）。
+
+**なぜ**: 1つ目はトピックの説明用の名前（「配列ユーティリティ」）と実際のクラス名（`Arrays`）を混同した。2つ目は、`List`に変換した後も、元の配列をソートしたいのか、変換後のリストをソートしたいのかが整理できていなかった。
+
+**教訓**: クラス名が分からないときは、まず`import java.util.◯◯;`で実在するクラス名を確認する。`Arrays`の各メソッドは「配列」が対象であり、`List`に変換した後は別のAPI（`list.sort()`など）を使う、という対象の違いを意識する。
+
+演習コードは `review/41-arrays-util/Main.java`。コンパイル・実行して動作確認済み（要素数5、ソート: [65, 78, 85, 92, 92]、92のインデックス: 3）。
