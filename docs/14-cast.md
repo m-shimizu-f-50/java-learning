@@ -103,7 +103,7 @@ if (e instanceof FullTimeEmployee fte) {
 
 ## 演習
 
-`14-cast/Main.java`にて（`13-abstract`の`Employee`/`FullTimeEmployee`/`PartTimeEmployee`を再利用）以下を実装。
+`exercises/14-cast/Main.java`にて（`13-abstract`の`Employee`/`FullTimeEmployee`/`PartTimeEmployee`を再利用）以下を実装。
 
 1. `Employee[]`配列に`FullTimeEmployee`と`PartTimeEmployee`のインスタンスを入れる
 2. 拡張for文＋`instanceof`（パターンマッチング構文）で型をチェック
@@ -122,7 +122,7 @@ if (e instanceof FullTimeEmployee fte) {
 
 **教訓**: 「コンパイルが通るか」は常に**静的型**（変数・配列の宣言時の型）を基準に判断される。動的型（実体）は実行時ポリモーフィズムには影響するが、コンパイル時のアクセス可否には影響しない。
 
-演習コードは `14-cast/Employee.java`, `FullTimeEmployee.java`, `PartTimeEmployee.java`, `Main.java`。コンパイル・実行して動作確認済み（正社員: 3000.0、パート: 20.0円 × 80時間）。
+演習コードは `exercises/14-cast/Employee.java`, `FullTimeEmployee.java`, `PartTimeEmployee.java`, `Main.java`。コンパイル・実行して動作確認済み（正社員: 3000.0、パート: 20.0円 × 80時間）。
 
 ### 復習（`review/38-cast`）：パターンマッチング構文を使わずに書いてしまう
 

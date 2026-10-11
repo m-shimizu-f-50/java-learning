@@ -67,7 +67,7 @@ curl "http://localhost:8090/tasks?page=0&size=2&sort=title,asc"
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
 
 1. `TaskService.java`: `getAll()`を`getAll(Pageable pageable)`に変更し、`taskRepository.findAll(pageable)`を返す
 2. `TaskController.java`: `getAllTasks()`を`getAllTasks(Pageable pageable)`に変更し、`Page<Task>`を`.map(TaskResponseDto::new)`で`Page<TaskResponseDto>`に変換して返す
@@ -83,7 +83,7 @@ curl "http://localhost:8090/tasks?page=0&size=2&sort=title,asc"
 
 **教訓**: 汎用的な名前（`Task`, `Page`, `Pageable`など）を使う際は、importが期待するパッケージ（今回であれば`org.springframework.data.domain`）を指しているか、追加のたびに確認する習慣をつける。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/TaskService.java`, `TaskController.java`。`mvn spring-boot:run`で起動し、`?page=0&size=2`と`?page=1&size=2`でそれぞれ異なるタスクが返り、`totalElements`/`totalPages`などのメタ情報も正しく含まれることを`curl`で確認済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/TaskService.java`, `TaskController.java`。`mvn spring-boot:run`で起動し、`?page=0&size=2`と`?page=1&size=2`でそれぞれ異なるタスクが返り、`totalElements`/`totalPages`などのメタ情報も正しく含まれることを`curl`で確認済み。
 
 ---
 

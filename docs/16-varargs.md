@@ -75,7 +75,7 @@ void printScores(String name, int... scores) { ... }
 
 ## 演習
 
-`16-varargs/Main.java`にて以下を実装。
+`exercises/16-varargs/Main.java`にて以下を実装。
 
 1. `average(double... numbers)`: 平均を返す（0個の場合は0）
 2. `printAll(String label, String... items)`: labelと各itemを出力
@@ -86,7 +86,7 @@ void printScores(String name, int... scores) { ... }
 
 今回は目立ったつまずきなし。`average()`（引数0個）で戻り値の`double`型への自動変換（`0` → `0.0`）も正しく理解できていた。
 
-演習コードは `16-varargs/Main.java`。コンパイル・実行して動作確認済み（20.0、0.0、好きな果物の一覧）。
+演習コードは `exercises/16-varargs/Main.java`。コンパイル・実行して動作確認済み（20.0、0.0、好きな果物の一覧）。
 
 ### 復習（`review/40-varargs`）：メソッドをmainの中に入れ子で定義してしまう
 

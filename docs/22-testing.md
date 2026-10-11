@@ -63,7 +63,7 @@ verify(fakeRepository).deleteById(1); // 「deleteById(1)が呼ばれたか」�
 
 ## 演習
 
-`20-spring-boot/src/test/java/com/example/demo/TaskServiceTest.java`にて以下を実装。
+`exercises/20-spring-boot/src/test/java/com/example/demo/TaskServiceTest.java`にて以下を実装。
 
 1. `getAll_returnsAllTasksFromRepository`: モックの`findAll()`が返すリストを`getAll()`経由で取得できるか検証
 2. `create_savesNewTaskWithGivenTitle`: `create()`実行後、`save()`が呼ばれたか・作成内容が正しいかを検証
@@ -85,4 +85,4 @@ verify(fakeRepository).deleteById(1); // 「deleteById(1)が呼ばれたか」�
 
 **教訓**: 「偽物を作る（mock）→ 台本を設定する（when/thenReturn）→ DIで注入する → 実行する → 結果 or 呼び出しを検証する（assert / verify）」と役割ごとに分解すると理解しやすい。`assert`系は戻り値の検証、`verify`は「呼ばれたかどうか」の検証、という使い分けも重要。
 
-演習コードは `20-spring-boot/src/test/java/com/example/demo/TaskServiceTest.java`。`mvn test`で実行し、3件全て成功することを確認済み。
+演習コードは `exercises/20-spring-boot/src/test/java/com/example/demo/TaskServiceTest.java`。`mvn test`で実行し、3件全て成功することを確認済み。

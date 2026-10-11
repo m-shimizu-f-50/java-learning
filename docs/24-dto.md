@@ -79,7 +79,7 @@ Entityをそのまま返していた時は`null`を直接返すだけで問題�
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
 
 1. `TaskRequestDto.java`: `title`のみを持つリクエスト用DTO
 2. `TaskResponseDto.java`: `id`/`title`/`done`とgetterを持つレスポンス用DTO、`Task`から変換するコンストラクタ
@@ -105,4 +105,4 @@ Entityをそのまま返していた時は`null`を直接返すだけで問題�
 
 **教訓**: `Task`のようなEntityから`TaskResponseDto`のようなDTOへ変換する処理を挟むと、「変換元が存在しない場合」への対応が新たに必要になる。DTO化のような設計変更を行う際は、正常系だけでなく異常系（存在しないIDなど）も必ず動作確認する。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/TaskRequestDto.java`, `TaskResponseDto.java`, `TaskController.java`。`mvn spring-boot:run`で起動し、CRUD一式と存在しないIDのケースを`curl`で確認済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/TaskRequestDto.java`, `TaskResponseDto.java`, `TaskController.java`。`mvn spring-boot:run`で起動し、CRUD一式と存在しないIDのケースを`curl`で確認済み。

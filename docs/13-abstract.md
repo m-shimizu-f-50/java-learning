@@ -140,7 +140,7 @@ class Circle extends Shape {
 
 ## 演習
 
-`13-abstract/`にて以下を実装。
+`exercises/13-abstract/`にて以下を実装。
 
 1. `abstract class Employee`: `name`フィールド、コンストラクタ、実装済み`printName()`、抽象メソッド`calculateSalary()`
 2. `FullTimeEmployee`（`Employee`継承）: `monthlySalary`をそのまま返す
@@ -168,7 +168,7 @@ class Circle extends Shape {
 
 **教訓**: 抽象クラスは「共通の実装（普通のフィールド・メソッド）」と「強制したい部分（`abstract`メソッドのみ）」が**混在**するクラス。「全部中身がない」という極端なイメージを持ってしまったら、実際に書いたコード（`printName()`など）に中身があったかどうかを具体的に思い出すと訂正しやすい。
 
-演習コードは `13-abstract/Employee.java`, `FullTimeEmployee.java`, `PartTimeEmployee.java`, `Main.java`。コンパイル・実行して動作確認済み（Alice: 3000.0、Bob: 1600.0）。
+演習コードは `exercises/13-abstract/Employee.java`, `FullTimeEmployee.java`, `PartTimeEmployee.java`, `Main.java`。コンパイル・実行して動作確認済み（Alice: 3000.0、Bob: 1600.0）。
 
 ### 復習（`review/37-abstract`）：配列リテラルの書き方とコピペ時の消し忘れ
 

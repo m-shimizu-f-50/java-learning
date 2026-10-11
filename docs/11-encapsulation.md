@@ -119,7 +119,7 @@ public class ShoppingList {
 
 ## 演習
 
-`11-encapsulation/Student.java`, `Main.java`にて以下を実装。
+`exercises/11-encapsulation/Student.java`, `Main.java`にて以下を実装。
 
 1. `Student`クラス: `private String name`, `private int score`
 2. コンストラクタで初期化
@@ -132,7 +132,7 @@ public class ShoppingList {
 - 初回、`Student`クラスの実装（private化・getter・setterのバリデーション）は完璧だったが、`Main`側で不正値セット後の最終`getScore()`出力が漏れており、「本当に弾かれているか」を出力から確認できない状態だった → 追加して解決
 - **教訓**: バリデーションのロジック自体が正しくても、「意図通り弾かれたことを示す出力」がなければ動作確認として不十分。境界ケース・異常系のテストは「弾かれた後の状態」まで確認する
 
-演習コードは `11-encapsulation/Student.java`, `Main.java`。コンパイル・実行して動作確認済み（更新されたスコア90、不正な点数です、最終スコア90）。
+演習コードは `exercises/11-encapsulation/Student.java`, `Main.java`。コンパイル・実行して動作確認済み（更新されたスコア90、不正な点数です、最終スコア90）。
 
 ### 復習（`review/35-encapsulation`）：フィールド未初期化と型の取り違え
 

@@ -19,14 +19,14 @@ JavaScript経験者がJavaの基礎からSpring Bootの実務レベルまで学�
 
 ## ディレクトリ構成
 
-演習コードはトピックごとにディレクトリを分けて管理する想定。復習チェックポイントの演習は`review/`配下に`review/01-static`のようにまとめる。
+演習コードはトピックごとにディレクトリを分け、`exercises/`配下に`exercises/01-variables-types`のようにまとめる。復習チェックポイントの演習は`review/`配下に`review/01-static`のようにまとめる。
 
 ## 実行方法
 
 各トピックのディレクトリに移動し、コンパイル・実行する。
 
 ```bash
-cd 03-array
+cd exercises/03-array
 javac Main.java   # コンパイル（Main.classを生成）
 java Main         # 実行（拡張子.classは付けない）
 ```
@@ -34,15 +34,15 @@ java Main         # 実行（拡張子.classは付けない）
 複数ファイルで構成されるトピックは、ワイルドカードで一括コンパイルできる。
 
 ```bash
-cd 07-interface
+cd exercises/07-interface
 javac *.java      # ディレクトリ内の全.javaファイルをまとめてコンパイル
 java Main
 ```
 
-`20-spring-boot`以降のSpring Bootプロジェクトは、Mavenで管理している。
+`exercises/20-spring-boot`以降のSpring Bootプロジェクトは、Mavenで管理している。
 
 ```bash
-cd 20-spring-boot
+cd exercises/20-spring-boot
 export JAVA_HOME=$(/usr/libexec/java_home -v 21)  # HomebrewのJDKと混同しないよう明示する
 mvn spring-boot:run
 ```

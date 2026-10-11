@@ -71,4 +71,4 @@ public TaskResponseDto createTask(@Valid @RequestBody TaskRequestDto request) {
 
 **教訓**: `@Valid`は「検証したいオブジェクトの直前」に置く。`int`のようなプリミティブ型にはBean Validationの制約を直接書けないため、`@Valid`を付ける意味がない。修正が反映されない場合は、保存されているか・正しいファイルを編集しているかを都度`Read`で確認する。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/TaskRequestDto.java`, `TaskController.java`。`mvn spring-boot:run`で起動し、空`title`での`POST`/`PUT`が`400`、正常な`title`なら成功することを`curl`で確認済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/TaskRequestDto.java`, `TaskController.java`。`mvn spring-boot:run`で起動し、空`title`での`POST`/`PUT`が`400`、正常な`title`なら成功することを`curl`で確認済み。

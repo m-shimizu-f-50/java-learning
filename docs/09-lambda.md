@@ -147,7 +147,7 @@ names.sort(String::compareTo); // メソッド参照
 
 ## 演習
 
-`09-lambda/Main.java`にて以下を実装。
+`exercises/09-lambda/Main.java`にて以下を実装。
 
 1. `interface Operation { int apply(int a, int b); }` を定義
 2. ラムダ式で足し算・掛け算の`Operation`を作成し呼び出す
@@ -160,7 +160,7 @@ names.sort(String::compareTo); // メソッド参照
 - 分散学習の復習チェックポイント（`review/08-lamda`）自体は正解したが、事後の質問で「ラムダ式＝インターフェースの型を定義すること」「ラムダ式＝1行で処理を完結させること」という2つの誤解があることが判明
   - **教訓**: ラムダ式は「関数型インターフェースという契約に対する、匿名クラスの省略記法」。インターフェース定義（契約）とラムダ式（実装）は別の役割であり、行数の長さは定義に関係ない
 
-演習コードは `09-lambda/Main.java`。コンパイル・実行して動作確認済み（足し算8、掛け算15、ソート後[Alice, Bob, Charlie]）。
+演習コードは `exercises/09-lambda/Main.java`。コンパイル・実行して動作確認済み（足し算8、掛け算15、ソート後[Alice, Bob, Charlie]）。
 
 ### 復習（`review/33-lambda`）：用語の再確認に時間がかかった
 

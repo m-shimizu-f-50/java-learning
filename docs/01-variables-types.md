@@ -76,7 +76,7 @@ BigDecimal totalWithTax = total.multiply(BigDecimal.ONE.add(taxRate)); // total 
 4. `final` を使って税率 `0.1` を定数として宣言
 5. 合計金額に税率を加えた金額を標準出力に表示
 
-演習コードは `01-variables-types/Main.java` に配置。コンパイル・実行して動作確認済み。
+演習コードは `exercises/01-variables-types/Main.java` に配置。コンパイル・実行して動作確認済み。
 
 ## つまずきの分析
 

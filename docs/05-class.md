@@ -93,4 +93,4 @@ javac Book.java Main.java
 
 ---
 
-演習コードは `05-class/Book.java`, `05-class/Main.java`。コンパイル・実行して動作確認済み。復習演習は `review/29-class/Product.java`, `Main.java`。コンパイル・実行して動作確認済み（消しゴム3000円、鉛筆450円）。
+演習コードは `exercises/05-class/Book.java`, `exercises/05-class/Main.java`。コンパイル・実行して動作確認済み。復習演習は `review/29-class/Product.java`, `Main.java`。コンパイル・実行して動作確認済み（消しゴム3000円、鉛筆450円）。

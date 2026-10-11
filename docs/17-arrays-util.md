@@ -88,7 +88,7 @@ list.size(); // 3
 
 ## 演習
 
-`17-arrays-util/Main.java`にて以下を実装。
+`exercises/17-arrays-util/Main.java`にて以下を実装。
 
 1. `int[] nums = {8, 3, 1, 9, 5};` を`Arrays.sort()`でソートし出力
 2. `Arrays.copyOfRange()`で最初の3要素を取り出して出力
@@ -99,7 +99,7 @@ list.size(); // 3
 
 初回、`java.util.Arrays`とは無関係な`java.lang.reflect.Array`が誤ってimportされていた（未使用のまま残っていた）。動作には影響しないが、コミット前に削除して整理した。
 
-演習コードは `17-arrays-util/Main.java`。コンパイル・実行して動作確認済み（[1, 3, 5, 8, 9] / [1, 3, 5] / [0, 0, 0, 0] / インデックス4）。
+演習コードは `exercises/17-arrays-util/Main.java`。コンパイル・実行して動作確認済み（[1, 3, 5, 8, 9] / [1, 3, 5] / [0, 0, 0, 0] / インデックス4）。
 
 ### 復習（`review/41-arrays-util`）：クラス名の混同とArrays.sort()の対象の誤り
 

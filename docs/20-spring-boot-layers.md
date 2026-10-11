@@ -116,7 +116,7 @@ public class TaskService {
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`にて以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`にて以下を実装。
 
 1. `TaskRepository.java`（`@Repository`）を新規作成: `findAll()`, `findById(id)`, `save(task)`, `deleteById(id)`
 2. `TaskService.java`を修正: `List<Task>`を直接持たず、コンストラクタで`TaskRepository`をDIし、各メソッドをRepositoryへの委譲に置き換える
@@ -132,7 +132,7 @@ public class TaskService {
 
 **教訓**: Repositoryの`save()`は「新規か更新かをRepository側が判断して吸収する」設計にすると、呼び出し側（Service）は常に同じ書き方（`save()`を呼ぶだけ）で済む。これはJPAなど実際のO/Rマッパーでも採用されている標準的なパターン。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、create→update→get→deleteの一連の流れで重複が発生しないことを確認済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、create→update→get→deleteの一連の流れで重複が発生しないことを確認済み。
 
 ---
 

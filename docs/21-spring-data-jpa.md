@@ -73,7 +73,7 @@ spring.h2.console.enabled=true         # ブラウザでDBの中身を見られ�
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`にて以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`にて以下を実装。
 
 1. `pom.xml`に`spring-boot-starter-data-jpa`と`h2`を追加（インフラ部分としてセットアップ済み）
 2. `application.properties`にH2の接続設定を追加（セットアップ済み）
@@ -86,7 +86,7 @@ spring.h2.console.enabled=true         # ブラウザでDBの中身を見られ�
 - `TaskRepository`をインターフェース化した際、コメントアウトした旧実装や`TaskService`の未使用importが残っていた。動作には影響しないが、コミット前に削除して整理した
 - **教訓**: 大きな書き換え（クラス→インターフェースなど）をした後は、不要になった古いコード・importが残っていないか確認する習慣をつける
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、H2データベースに対してcreate→get→update→deleteの一連のCRUD操作を`curl`で確認済み（更新時の重複も発生しないことを確認）。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、H2データベースに対してcreate→get→update→deleteの一連のCRUD操作を`curl`で確認済み（更新時の重複も発生しないことを確認）。
 
 ---
 

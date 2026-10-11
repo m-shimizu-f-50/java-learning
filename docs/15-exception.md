@@ -173,7 +173,7 @@ try (FileReader reader = new FileReader("data.txt")) {
 
 ## 演習
 
-`15-exception/InsufficientFundsException.java`, `Main.java`にて以下を実装。
+`exercises/15-exception/InsufficientFundsException.java`, `Main.java`にて以下を実装。
 
 1. `InsufficientFundsException`（`Exception`継承のChecked例外）
 2. `withdraw(double balance, double amount)`: 残高不足なら例外をthrow、それ以外は`balance - amount`を返す
@@ -189,7 +189,7 @@ try (FileReader reader = new FileReader("data.txt")) {
   - **教訓**: `extends Exception`は「投げられる資格を得る」＋「`getMessage()`などの機能を継承で手に入れる」の2つの意味を持つ、とセットで覚える。コンストラクタは`05-class`と同じ「`new`時に自動で呼ばれ、値を初期化するもの」という基本に立ち返ると理解しやすい
 - 境界値の条件ミス（`age == 0`と書いて`age < 0`のつもりになっていた）も発生。`10-stream`の`>`/`>=`取り違えと同じ系統のミスで、境界値ちょうどのテストケースがないと気づきにくい
 
-演習コードは `15-exception/InsufficientFundsException.java`, `Main.java`。コンパイル・実行して動作確認済み（異常系: 残高不足です→処理が終了しました、正常系: 新しい残高500.0→処理が終了しました）。
+演習コードは `exercises/15-exception/InsufficientFundsException.java`, `Main.java`。コンパイル・実行して動作確認済み（異常系: 残高不足です→処理が終了しました、正常系: 新しい残高500.0→処理が終了しました）。
 
 ### 復習（`review/23-exception`）：「Checked例外は呼び出し側で必ず対応する」ルールを忘れていた
 

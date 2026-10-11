@@ -110,7 +110,7 @@ public class GlobalExceptionHandler {
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
 
 1. `TaskNotFoundException.java`: `RuntimeException`を継承した独自例外
 2. `TaskService.java`: `getById`が`orElseThrow`で`TaskNotFoundException`を投げるように変更
@@ -136,4 +136,4 @@ public class GlobalExceptionHandler {
 
 **教訓**: `@RestControllerAdvice`は`@Service`などと同じ「IoCコンテナに登録される部品」だが、呼ばれ方が「明示的な呼び出し」ではなく「例外が投げられた時にフレームワークが自動的に探して呼ぶ」という点で特殊。`23-security`のフィルターチェーンと同様、「自分では呼んでいないのに動く」処理を見たら、それはSpringが裏側で仲介している合図だと考える。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/TaskNotFoundException.java`, `TaskService.java`, `TaskController.java`, `GlobalExceptionHandler.java`。`mvn spring-boot:run`で起動し、存在しないIDへの`GET`/`PUT`が`404`とメッセージを返すこと、正常系は引き続き問題なく動くことを`curl`で確認済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/TaskNotFoundException.java`, `TaskService.java`, `TaskController.java`, `GlobalExceptionHandler.java`。`mvn spring-boot:run`で起動し、存在しないIDへの`GET`/`PUT`が`404`とメッセージを返すこと、正常系は引き続き問題なく動くことを`curl`で確認済み。

@@ -118,7 +118,7 @@ salaries.stream()
 
 ## 演習
 
-`10-stream/Main.java`にて以下を実装。
+`exercises/10-stream/Main.java`にて以下を実装。
 
 1. 数値リストから15より大きい値をフィルタし、2倍にしたリストを作成
 2. 文字列リストから5文字以上の単語を抽出
@@ -136,7 +136,7 @@ salaries.stream()
 
 **修正後の結果**: `[apple, banana, grape]`で正しく5文字以上の単語がすべて抽出された。
 
-演習コードは `10-stream/Main.java`。コンパイル・実行して動作確認済み（結果[44, 60]、長い単語[apple, banana, grape]、合計文字数23）。
+演習コードは `exercises/10-stream/Main.java`。コンパイル・実行して動作確認済み（結果[44, 60]、長い単語[apple, banana, grape]、合計文字数23）。
 
 ### 復習（`review/34-stream`）：終端操作の戻り値をStream型で受けてしまう
 

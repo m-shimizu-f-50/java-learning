@@ -112,7 +112,7 @@ class TaskService {
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`にて以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`にて以下を実装。
 
 1. `GreetingService`: `@Service`を付け、`greet(String name)`で挨拶文を返す
 2. `GreetingController`: `@RestController`を付け、コンストラクタで`GreetingService`をDIし、`GET /greet?name=xxx`で呼び出す
@@ -132,4 +132,4 @@ class TaskService {
 
 **教訓**: DI/IoCのような「裏側の仕組み」は、一度説明を聞いて納得しても、間隔を空けると具体的な仕組み（誰が・いつ・何を渡すか）を忘れやすい。`Car`/`Engine`の対比と「部品倉庫」の例えを再度示すと思い出せた。加えて、「なぜDIが嬉しいのか」を`Mockito`でのモック差し替え（テストで本物の代わりにモックを注入できる）という具体的な実務上の利点と結びつけると、単なる仕組みの説明より記憶に残りやすい。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、`curl`で`GET /greet?name=太郎`が`"こんにちは、太郎さん"`を返すことを確認済み。`NotificationServiceTest`は`mvn test`でパス済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、`curl`で`GET /greet?name=太郎`が`"こんにちは、太郎さん"`を返すことを確認済み。`NotificationServiceTest`は`mvn test`でパス済み。

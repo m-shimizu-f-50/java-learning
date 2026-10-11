@@ -87,7 +87,7 @@ double average = (double) sum / steps.length; // sumをdoubleにキャストし�
 4. 平均点（double）を計算
 5. 2次元配列 `table[1][0]` の値を出力
 
-演習コードは `03-array/Main.java`。コンパイル・実行して動作確認済み（合計362、平均72.4、table[1][0]=3）。
+演習コードは `exercises/03-array/Main.java`。コンパイル・実行して動作確認済み（合計362、平均72.4、table[1][0]=3）。
 
 ## つまずきの分析
 

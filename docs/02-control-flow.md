@@ -101,14 +101,14 @@ case 12 | 1 | 2 -> System.out.println("冬"); // 誤り: ビット単位ORとし
 
 ## 演習
 
-`02-control-flow/Main.java` にて以下を実装。
+`exercises/02-control-flow/Main.java` にて以下を実装。
 
 1. `int score = 75;` を用意し、`if-else if-else`で90以上A・70以上B・60以上C・それ未満Dを判定
 2. `for`文で1から10までの合計を計算
 3. 拡張for文で配列 `{10, 20, 30, 40}` の各要素を出力
 4. `switch`文（矢印構文）で曜日番号から曜日名を出力
 
-演習コードは `02-control-flow/Main.java`。コンパイル・実行して動作確認済み（B、合計55、10/20/30/40、水曜日）。
+演習コードは `exercises/02-control-flow/Main.java`。コンパイル・実行して動作確認済み（B、合計55、10/20/30/40、水曜日）。
 
 ## つまずきの分析
 

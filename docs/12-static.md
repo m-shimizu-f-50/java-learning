@@ -153,7 +153,7 @@ void printInfo() {
 
 ## 演習
 
-`12-static/Counter.java`, `Main.java`にて以下を実装。
+`exercises/12-static/Counter.java`, `Main.java`にて以下を実装。
 
 1. `Counter`クラス: `static int count = 0;`
 2. コンストラクタで`count++`（インスタンス生成のたびに増加）
@@ -184,7 +184,7 @@ void printInfo() {
 
 **教訓**: `static`と`final`は独立した別の軸（上記「staticとfinalは別の軸」参照）。矛盾する具体例（`static`だが変化する`ticketNumber`）を実際に突きつけられると誤解に気づきやすい。また「`static`を外すと実際にどう挙動が変わるか」を`javac`/`java`で実験して確認すると、「書き方の好みではなく明確に異なる挙動である」ことが実感しやすい。
 
-演習コードは `12-static/Counter.java`, `Main.java`。コンパイル・実行して動作確認済み（現在のカウント3、カテゴリーサンプル）。
+演習コードは `exercises/12-static/Counter.java`, `Main.java`。コンパイル・実行して動作確認済み（現在のカウント3、カテゴリーサンプル）。
 
 ### 「finalは定数（共有される1つの値）」という誤解（逆方向の混同）
 

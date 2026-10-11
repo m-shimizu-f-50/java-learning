@@ -79,7 +79,7 @@ public Task updateTask(@PathVariable int id, @RequestBody Task task) {
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
 
 1. `Task.java`: `id`, `title`, `done`を持つクラス（`setTitle`を含む）
 2. `TaskService.java`（`@Service`）: `getAll()`, `getById(id)`, `create(title)`, `update(id, title)`, `delete(id)`
@@ -119,4 +119,4 @@ public Task updateTask(@PathVariable int id, @RequestBody Task task) {
 
 **教訓**: Spring Bootは保存しただけでは変更が反映されない（devtoolsなどのホットリロード設定をしていない限り）。コード修正後は必ずアプリを再起動してから動作確認する。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、`GET`/`POST`/`PUT`/`DELETE`一通りのCRUD操作を`curl`で確認済み。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/`。`mvn spring-boot:run`で起動し、`GET`/`POST`/`PUT`/`DELETE`一通りのCRUD操作を`curl`で確認済み。

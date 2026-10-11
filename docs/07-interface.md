@@ -160,7 +160,7 @@ class CassetteTape implements Playable { ... } // OK: 「カセットテープ�
 
 ## 演習
 
-`07-interface/`にて以下を実装。
+`exercises/07-interface/`にて以下を実装。
 
 1. `Flyable`インターフェース: `void fly();`
 2. `Swimmable`インターフェース: `void swim();`
@@ -168,7 +168,7 @@ class CassetteTape implements Playable { ... } // OK: 「カセットテープ�
 4. `Duck`クラス: `Flyable`と`Swimmable`の両方を実装
 5. `Main`クラス: `Flyable[]`配列に`Bird`と`Duck`を入れて拡張for文で`fly()`を呼び出し（ポリモーフィズム確認）、`Duck`単体で`swim()`も呼び出し
 
-演習コードは `07-interface/Flyable.java`, `Swimmable.java`, `Bird.java`, `Duck.java`, `Main.java`。`javac *.java`で一括コンパイルし動作確認済み。
+演習コードは `exercises/07-interface/Flyable.java`, `Swimmable.java`, `Bird.java`, `Duck.java`, `Main.java`。`javac *.java`で一括コンパイルし動作確認済み。
 
 ## つまずきの分析
 

@@ -111,7 +111,7 @@ while (it.hasNext()) {
 
 ## 演習
 
-`08-collections/Main.java`にて以下を実装。
+`exercises/08-collections/Main.java`にて以下を実装。
 
 1. `List<String> fruits`に3要素を`add`
 2. 拡張for文で全要素出力
@@ -122,7 +122,7 @@ while (it.hasNext()) {
 
 今回は目立ったつまずきなし。`remove(Object)`と`remove(int)`のオーバーロードの違いを解説し、`List<Integer>`特有の罠（値のつもりがインデックス扱いされる）を確認した。
 
-演習コードは `08-collections/Main.java`。コンパイル・実行して動作確認済み（りんご/バナナ/ぶどう出力、削除後size=2、合計15）。
+演習コードは `exercises/08-collections/Main.java`。コンパイル・実行して動作確認済み（りんご/バナナ/ぶどう出力、削除後size=2、合計15）。
 
 ### 復習（`review/24-collections`）：コメントと実際の動作の不一致
 

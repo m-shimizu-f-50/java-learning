@@ -90,7 +90,7 @@ curl -s http://localhost:8090/tasks; echo
 
 ## 演習
 
-`20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
+`exercises/20-spring-boot/src/main/java/com/example/demo/`に以下を実装。
 
 1. `pom.xml`に`spring-boot-starter-security`を追加
 2. `SecurityConfig.java`（`@Configuration`）を作成し、`SecurityFilterChain`の`@Bean`で`GET /tasks/**`は`permitAll()`、それ以外は`authenticated()`、HTTP Basic認証を設定
@@ -112,4 +112,4 @@ curl -s http://localhost:8090/tasks; echo
 
 **教訓**: 無関係なプロセスは停止させず、`application.properties`の`server.port`を空いているポートに変更する。ローカル環境で複数のアプリ・ツールを併用していると、こうしたポート競合はしばしば起きるので、都度`lsof -i :ポート番号`で確認する習慣をつける。
 
-演習コードは `20-spring-boot/src/main/java/com/example/demo/SecurityConfig.java`。`mvn spring-boot:run`で起動し、`GET`は認証なしで成功、`POST`は未認証で`401`・認証ありで成功することを`curl`で確認済み（ポートは`8090`）。
+演習コードは `exercises/20-spring-boot/src/main/java/com/example/demo/SecurityConfig.java`。`mvn spring-boot:run`で起動し、`GET`は認証なしで成功、`POST`は未認証で`401`・認証ありで成功することを`curl`で確認済み（ポートは`8090`）。

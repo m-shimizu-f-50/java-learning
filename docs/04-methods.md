@@ -99,14 +99,14 @@ public static void main(String[] args) {
 
 ## 演習
 
-`04-methods/Main.java` にて以下を実装。
+`exercises/04-methods/Main.java` にて以下を実装。
 
 1. `max(int a, int b)`: 大きい方の値を返す
 2. `sum(int[] nums)`: 配列の合計を返す
 3. `greet(String name)`: `"Hello, " + 名前 + "!"` を返す
 4. `main`から呼び出して結果を出力
 
-演習コードは `04-methods/Main.java`。コンパイル・実行して動作確認済み（最大値20、合計15、Hello, まさと!）。
+演習コードは `exercises/04-methods/Main.java`。コンパイル・実行して動作確認済み（最大値20、合計15、Hello, まさと!）。
 
 ## つまずきの分析
 

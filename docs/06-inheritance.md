@@ -113,14 +113,14 @@ class Character {
 
 ## 演習
 
-`06-inheritance/`にて以下を実装。
+`exercises/06-inheritance/`にて以下を実装。
 
 1. `Animal`クラス: `name`フィールド、コンストラクタ、`eat()`メソッド
 2. `Dog`クラス（`Animal`継承）: 独自メソッド`bark()`
 3. `Cat`クラス（`Animal`継承）: `eat()`を`@Override`
 4. `Main`で`Dog`・`Cat`のインスタンスを生成し、`eat()`と固有メソッドを呼び出し
 
-演習コードは `06-inheritance/Animal.java`, `Dog.java`, `Cat.java`, `Main.java`。コンパイル・実行して動作確認済み。
+演習コードは `exercises/06-inheritance/Animal.java`, `Dog.java`, `Cat.java`, `Main.java`。コンパイル・実行して動作確認済み。
 
 ## つまずきの分析
 

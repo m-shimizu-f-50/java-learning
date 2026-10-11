@@ -62,7 +62,7 @@ period.getYears() + "年" + period.getMonths() + "ヶ月" + period.getDays() + "
 
 ## 演習
 
-`19-datetime/Main.java`にて以下を実装。
+`exercises/19-datetime/Main.java`にて以下を実装。
 
 1. `LocalDate.of(...)`で入社日を作成
 2. `LocalDate.now()`で今日の日付を取得
@@ -74,7 +74,7 @@ period.getYears() + "年" + period.getMonths() + "ヶ月" + period.getDays() + "
 
 今回は目立ったつまずきなし。`plusYears(1)`の結果を別変数で受け取り、元の`hireDate`が変わらないことを確認できており、不変性の理解ができていた。
 
-演習コードは `19-datetime/Main.java`。コンパイル・実行して動作確認済み。
+演習コードは `exercises/19-datetime/Main.java`。コンパイル・実行して動作確認済み。
 
 ---
 

@@ -55,7 +55,7 @@ sb.deleteCharAt(0);
 
 ## 演習
 
-`18-string-builder/Main.java`にて以下を実装。
+`exercises/18-string-builder/Main.java`にて以下を実装。
 
 1. `String a = "test"`, `b = "test"`, `c = new String("test")`で`==`/`.equals()`の挙動を確認
 2. `StringBuilder`で1〜5を連結した文字列を作成
@@ -65,4 +65,4 @@ sb.deleteCharAt(0);
 
 今回は目立ったつまずきなし。文字列プールの挙動（`==`と`.equals()`の違い）、`StringBuilder`の`append`/`reverse()`ともに正しく理解できていた。
 
-演習コードは `18-string-builder/Main.java`。コンパイル・実行して動作確認済み（true, false, true, 12345, 54321）。
+演習コードは `exercises/18-string-builder/Main.java`。コンパイル・実行して動作確認済み（true, false, true, 12345, 54321）。
